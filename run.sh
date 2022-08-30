@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # Runs GIF folder
 DISPLAY=:0.0 XAUTHORITY=/home/baeonette/.Xauthority /usr/bin/feh --quiet --preload --full-screen --reload 60 -Y --slideshow-delay 0.1 /home/baeonette/gif-player/media/playing/*.pkg/content/
 
