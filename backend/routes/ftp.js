@@ -34,14 +34,14 @@ router.post('/', (req, res, next) => {
 
       // Check for directory
       if (dir) {
-        exec(`rm uploads/${file.name}`);
+        exec(`rm -rf uploads/*`);
         play();
         return res.send({ status: 500, message: 'File already exists' }) && resolve();
       }
       // Make directory
-      exec(`mkdir ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/`, async (err, out, stderr) => {
+      exec(`mkdir -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/`, async (err, out, stderr) => {
 
-        if (err && err.toString().toLowerCase().includes('file exists')) return res.send({ status: 500, message: 'File already exists' }) && resolve();
+        if (err && err.toString().toLowerCase().includes('file exists')) return res.send({ status: 500, message: 'Adding file to queue' }) && play() && resolve();
 
         // Add content
         exec(`mkdir ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/content/`);
@@ -72,10 +72,16 @@ router.post('/', (req, res, next) => {
         dir = false;
       }
       if (dir) {
-        exec(`cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')} && rm -rf ../media/playing/${dir[0]}`, async (err, out, stderr) => {
+        exec(`cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')}/ && rm -rf ../media/playing/${dir[0]}`, async (err, out, stderr) => {
           if (err) return console.log(err)
         });
-      }
+      } else {
+        exec(`cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')}/`, async (err, out, stderr) => {
+          if (err) return console.log(err)
+        });
+      };
+
+      exec('bash ../stop.sh; bash ../run.sh');
     };
 
   };

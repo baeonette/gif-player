@@ -47,7 +47,7 @@ export class InputComponent implements OnInit {
     var image = this.uploadedImage; //get Image Base64
     var data = this.uploadedImageData;
 
-    this.http.post('http://localhost:3000/api/ftp', { content: image, name: data.name, size: data.size, type: data.type }).subscribe((res: any) => {
+    this.http.post('http://10.12.18.226:3000/api/ftp', { content: image, name: data.name, size: data.size, type: data.type }).subscribe((res: any) => {
       console.log(res);
       if (res.status === 200) this.message = res.message;
       else if (res.status === 500) this.message = res.message;
