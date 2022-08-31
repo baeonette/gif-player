@@ -34,7 +34,7 @@ router.post('/', (req, res, next) => {
 
       // Check for directory
       if (dir) {
-        exec(`rm uploads/*`);
+        exec(`rm uploads/${file.name}`);
         play();
         return res.send({ status: 500, message: 'File already exists' }) && resolve();
       }
@@ -45,7 +45,7 @@ router.post('/', (req, res, next) => {
 
         // Add content
         exec(`mkdir ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/content/`);
-        exec(`cp ./uploads/${file.name} ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')} && rm uploads/*`);
+        exec(`cp ./uploads/${file.name} ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')} && rm uploads/${file.name}`);
 
         // Pull frames
         exec(`ffmpeg -i ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/${file.name.toLowerCase()} -vsync 0 ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/content/${file.name.toLowerCase().replace('gif', '')}%03d.png`, async (err, out, stderr) => {
