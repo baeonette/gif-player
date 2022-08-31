@@ -34,18 +34,18 @@ router.post('/', (req, res, next) => {
 
       // Check for directory
       if (dir) {
-        exec(`rm -rf uploads/*`);
+        exec(`rm uploads/*`);
         play();
         return res.send({ status: 500, message: 'File already exists' }) && resolve();
       }
       // Make directory
-      exec(`mkdir -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/`, async (err, out, stderr) => {
+      exec(`mkdir ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/`, async (err, out, stderr) => {
 
         if (err && err.toString().toLowerCase().includes('file exists')) return res.send({ status: 500, message: 'Adding file to queue' }) && play() && resolve();
 
         // Add content
         exec(`mkdir ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/content/`);
-        exec(`cp ./uploads/${file.name} ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')} && rm uploads/${file.name}`);
+        exec(`cp ./uploads/${file.name} ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')} && rm uploads/*`);
 
         // Pull frames
         exec(`ffmpeg -i ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/${file.name.toLowerCase()} -vsync 0 ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/content/${file.name.toLowerCase().replace('gif', '')}%03d.png`);
@@ -71,12 +71,13 @@ router.post('/', (req, res, next) => {
       } catch (err) {
         dir = false;
       }
+
+      exec(`mkdir -p ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')}; cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')}/`, async (err, out, stderr) => {
+        if (err) return console.log(err)
+      });
+
       if (dir) {
-        exec(`cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')}/ && rm -rf ../media/playing/${dir[0]}`, async (err, out, stderr) => {
-          if (err) return console.log(err)
-        });
-      } else {
-        exec(`cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')}/`, async (err, out, stderr) => {
+        exec(`rm -rf ../media/playing/${dir[0]}`, async (err, out, stderr) => {
           if (err) return console.log(err)
         });
       };
