@@ -35,6 +35,7 @@ router.post('/', (req, res, next) => {
       // Check for directory
       if (dir) {
         exec(`rm uploads/${file.name}`);
+        play();
         return res.send({ status: 500, message: 'File already exists' }) && resolve();
       }
       // Make directory
@@ -55,44 +56,30 @@ router.post('/', (req, res, next) => {
         fs.writeFile(`../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/data.json`, JSON.stringify(file, null, 4), (err) => {
           console.log(err);
         });
+
+        play();
+
         res.send({ status: 200, message: 'File added!' });
         resolve();
       });
     });
 
-    // // Extract frames from GIF
-    // execSync(`ffmpeg -i ../media/storage/${pkg.originalName.toLowerCase().replace('gif', 'pkg')}/${pkg.originalName.toLowerCase()} -vsync 0 ../media/storage/${pkg.originalName.toLowerCase().replace('gif', 'pkg')}/content/${pkg.originalName.toLowerCase().replace('gif', '')}%03d.png`, { stdio: 'inherit' });
-    // // Add data.json with pkg object data
-    // writeFile(`../media/storage/${pkg.originalName.toLowerCase().replace('gif', 'pkg')}/data.json`, JSON.stringify(pkg, null, 4));
+    function play(dir) {
 
-    // // Add to playing directory
-    // var playingDir = readdirSync('../media/playing/');
-    // cp(`../media/storage/${pkg.originalName.toLowerCase().replace('gif', 'pkg')}/`, `../media/playing/${pkg.originalName.toLowerCase().replace('gif', 'pkg')}`, { recursive: true });
-    // if (playingDir.length) rmdir(`../media/playing/${playingDir[0]}`, { recursive: true, force: true });
-    //     res.send({ status: 200, message: 'Uploaded!' });
-    //   } catch (err) {
-    //     return console.log(err)
-    //     // Remove pkg if an error exists
-    //     rm(`${pkg.path}`, err => {
-    //       if (err) console.log(err)
-    //     });
-    //     if (err.code === 'EEXIST') {
-    //       res.send({ status: 500, error: 'File Exists' })
-    //       try {
-    //         // Add to playing directory
-    //         var playingDir = readdirSync('../media/playing/');
-    //         cp(`../media/storage/${pkg.originalName.toLowerCase().replace('gif', 'pkg')}/`, `../media/playing/${pkg.originalName.toLowerCase().replace('gif', 'pkg')}`, { recursive: true });
-    //         if (playingDir.length) rmdir(`../media/playing/${playingDir[0]}`, { recursive: true, force: true });
-    //       } catch (err) {
-    //         console.log(err);
-    //       }
-    //     }
-    //     else res.send({ status: 500, error: err });
-    //     console.log(err);
-    //     rmdir(`../media/storage/${pkg.originalName.toLowerCase().replace('gif', 'pkg')}/`, { recursive: true, force: true });
-    //   }
-    // });
+      try {
+        var dir = fs.readdirSync(`../media/playing/`);
+      } catch (err) {
+        dir = false;
+      }
+      if (dir) {
+        exec(`cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/ && rm -rf ../media/playing/${dir[0]}`, async (err, out, stderr) => {
+          if (err) return console.log(err)
+        });
+      }
+    };
+
   };
+
 });
 
 module.exports = router;
