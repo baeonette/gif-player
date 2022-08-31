@@ -72,7 +72,7 @@ router.post('/', (req, res, next) => {
         dir = false;
       }
       if (dir) {
-        exec(`cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/ && rm -rf ../media/playing/${dir[0]}`, async (err, out, stderr) => {
+        exec(`cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')} && rm -rf ../media/playing/${dir[0]}`, async (err, out, stderr) => {
           if (err) return console.log(err)
         });
       }
