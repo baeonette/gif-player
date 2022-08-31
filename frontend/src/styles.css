@@ -6495,6 +6495,10 @@ button.bg-light:focus {
   background-color: #353645 !important;
 }
 
+.bg-mid {
+  background-color: rgba(1, 1, 20, 0.2) !important;
+}
+
 a.bg-dark:hover,
 a.bg-dark:focus,
 button.bg-dark:hover,

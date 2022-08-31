@@ -1,7 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { HomeComponent } from './components/home/home.component';
+import { InputComponent } from './components/input/input.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: 'upload',
+    component: InputComponent
+  },
+  {
+    path: '',
+    component: HomeComponent
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
