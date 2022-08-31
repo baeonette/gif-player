@@ -48,19 +48,19 @@ router.post('/', (req, res, next) => {
         exec(`cp ./uploads/${file.name} ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')} && rm uploads/*`);
 
         // Pull frames
-        exec(`ffmpeg -i ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/${file.name.toLowerCase()} -vsync 0 ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/content/${file.name.toLowerCase().replace('gif', '')}%03d.png`);
+        exec(`ffmpeg -i ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/${file.name.toLowerCase()} -vsync 0 ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/content/${file.name.toLowerCase().replace('gif', '')}%03d.png`, async (err, out, stderr) => {
+          // Add data.json with gif data
+          delete file.content;
 
-        // Add data.json with gif data
-        delete file.content;
+          fs.writeFile(`../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/data.json`, JSON.stringify(file, null, 4), (err) => {
+            console.log(err);
+          });
 
-        fs.writeFile(`../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/data.json`, JSON.stringify(file, null, 4), (err) => {
-          console.log(err);
+          play();
+
+          res.send({ status: 200, message: 'File added!' });
+          resolve();
         });
-
-        play();
-
-        res.send({ status: 200, message: 'File added!' });
-        resolve();
       });
     });
 
@@ -72,17 +72,17 @@ router.post('/', (req, res, next) => {
         dir = false;
       }
 
-      exec(`mkdir -p ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')}; cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/${file.name.toLowerCase().replace('gif', 'pkg')}/`, async (err, out, stderr) => {
-        if (err) return console.log(err)
+      exec(`mkdir -p ../media/playing/; cp -r ../media/storage/${file.name.toLowerCase().replace('gif', 'pkg')}/ ../media/playing/`, async (err, out, stderr) => {
+        if (err) return console.log(err);
+        exec('sleep 1; bash ../stop.sh; sleep 1; bash ../run.sh');
       });
 
       if (dir) {
-        exec(`rm -rf ../media/playing/${dir[0]}`, async (err, out, stderr) => {
-          if (err) return console.log(err)
+        exec(`rm -rf ../media/playing/${dir[0]}/`, async (err, out, stderr) => {
+          if (err) return console.log(err);
+          exec('sleep 1; bash ../stop.sh; sleep 1; bash ../run.sh');
         });
       };
-
-      exec('bash ../stop.sh; bash ../run.sh');
     };
 
   };

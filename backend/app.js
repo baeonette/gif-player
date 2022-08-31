@@ -8,6 +8,7 @@ var cors = require('cors');
 
 var indexRouter = require('./routes/index');
 var ftpRouter = require('./routes/ftp');
+const { exec } = require('child_process');
 
 var app = express();
 
@@ -41,6 +42,8 @@ app.use(function (err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+exec('bash ../run.sh')
 
 logready('Backend');
 
