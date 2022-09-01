@@ -1,5 +1,14 @@
 img {
-  padding: 2px;
-  max-width: 15em;
-  height: auto;
+  padding: 8px;
+  vertical-align: middle;
+}
+
+p {
+  color: white;
+}
+
+button {
+  padding: 7px;
+  margin-left: 10px;
+  margin-right: 10px;
 }

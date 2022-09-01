@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { FormBuilder } from '@angular/forms';
 import { FormGroup } from '@angular/forms';
 import { ChangeDetectorRef } from '@angular/core';
+import { Router, NavigationEnd, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-input',
@@ -15,10 +16,13 @@ export class InputComponent implements OnInit {
   uploadedImageData: any;
   imageLoaded: boolean = false;
   message: string = '';
+  server: string = 'http://localhost:3000/api';
   constructor(
     private fb: FormBuilder,
     private changeDetector: ChangeDetectorRef,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -39,19 +43,24 @@ export class InputComponent implements OnInit {
       reader.readAsDataURL(event.target.files[i]);
       this.uploadedImageData = event.target.files[i];
     }
-  }
+  };
+
   handleImageLoad() {
     this.imageLoaded = true;
-  }
-  onSubmit() {
+  };
+
+  onSubmit(): any {
     var image = this.uploadedImage; //get Image Base64
     var data = this.uploadedImageData;
 
-    this.http.post('http://localhost:3000/api/ftp', { content: image, name: data.name, size: data.size, type: data.type }).subscribe((res: any) => {
+    if (!data) return this.message = 'Please select a GIF';
+
+    this.http.post(this.server + '/ftp', { content: image, name: data.name, size: data.size, type: data.type }).subscribe((res: any) => {
       console.log(res);
       if (res.status === 200) this.message = res.message;
       else if (res.status === 500) this.message = res.message;
       else res.message = res.status + ' ' + res.message;
+      this.router.navigate([this.router.url])
     });
-  }
+  };
 }

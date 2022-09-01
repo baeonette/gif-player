@@ -6,13 +6,21 @@ var { execSync, exec } = require('child_process');
 const path = require('path');
 const upload = multer();
 
-/* GET files. */
+// Get all gifs
 router.get('/gifs', (req, res, next) => {
   var gifs = fs.readdirSync('./media/storage');
   gifs.shift() // Remove ".storage"
   res.json(gifs);
 });
 
+// Get playing GIF
+router.get('/playing', (req, res, next) => {
+  var gifs = fs.readdirSync('./media/playing');
+  gifs.shift() // Remove ".storage"
+  res.json(gifs);
+});
+
+// Upload GIF
 router.post('/', (req, res, next) => {
   const file = req.body;
   const base64data = file.content.replace(/^data:.*,/, '');
@@ -52,7 +60,32 @@ router.post('/', (req, res, next) => {
       });
     });
   };
+}); // Upload GIF end
 
-});
+// Play GIF
+router.post('/play', async (req, res, next) => {
+  var gif = req.body.gif;
+
+  // Delete other GIFs
+  var playing = fs.readdirSync('./media/playing');
+  playing.shift(); // Remove .playing file
+
+  if (playing && playing.length) fs.unlink('./media/playing/' + playing[0]);
+
+  // Copy GIF to playing dir
+  var cpGif = fs.createReadStream('./media/storage/' + gif);
+  cpGif.pipe(fs.createWriteStream('./media/playing/' + gif));
+  
+  res.send({ status: 200, message: `Playing ${gif}!` });
+}); // Play GIF end
+
+// Delete GIF
+router.delete('/delete', (req, res, next) => {
+  var gif = req.body.gif;
+  fs.unlink(`./media/storage/${gif}`, (err) => {
+    if (err) return res.send({ status: 500, messages: 'An error occurred deleting the GIF' });
+    if (!err) res.send({ status: 200, messages: 'Success!' });
+  });
+}); // Delete GIF end
 
 module.exports = router;

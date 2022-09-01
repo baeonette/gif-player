@@ -11,6 +11,7 @@ import { ChangeDetectorRef } from '@angular/core';
 })
 export class GifsComponent implements OnInit {
   public gifs: any;
+  public playing: any;
   public server: string = 'http://localhost:3000/api';
 
   constructor(
@@ -23,6 +24,21 @@ export class GifsComponent implements OnInit {
     this.http.get(this.server + '/ftp/gifs').subscribe((res: any) => {
       this.gifs = res;
     });
-  }
+    this.http.get(this.server + '/ftp/playing').subscribe((res: any) => {
+      if (res) this.playing = res;
+    });
+  };
+
+  deleteGif(gif: any) {
+    this.http.delete(this.server + '/ftp/delete', { body: { gif: gif } }).subscribe((res: any) => {
+      this.ngOnInit();
+    });
+  };
+
+  selectGif(gif: any) {
+    this.http.post(this.server + '/ftp/play', { gif: gif }).subscribe((res: any) => {
+      this.ngOnInit();
+    });
+  };
 
 }

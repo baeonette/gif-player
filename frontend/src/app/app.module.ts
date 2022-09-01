@@ -8,7 +8,6 @@ import { AppComponent } from './app.component';
 import { InputComponent } from './components/input/input.component';
 import { HomeComponent } from './components/home/home.component';
 import { GifsComponent } from './components/gifs/gifs.component';
-import { PlayingComponent } from './components/playing/playing.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +15,6 @@ import { PlayingComponent } from './components/playing/playing.component';
     InputComponent,
     HomeComponent,
     GifsComponent,
-    PlayingComponent
   ],
   imports: [
     BrowserModule,
