@@ -1,1 +1,13 @@
-<p>gifs works!</p>
+<div style="margin-top: 2em; margin-bottom: 2em;" class="container">
+  <div class="col">
+
+    <div class="gif" *ngFor="let gif of gifs">
+      <div class="{{gif}}">
+        <img [id]="gif" [src]="server + '/storage/' + gif" [alt]="gif">
+        <br>
+        <button class="btn btn-primary">Select</button>
+      </div>
+    </div>
+
+  </div>
+</div>

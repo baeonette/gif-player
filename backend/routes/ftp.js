@@ -7,13 +7,10 @@ const path = require('path');
 const upload = multer();
 
 /* GET files. */
-router.get('/', function (req, res, next) {
-  var package = [];
-
-  res.sendFile(`media/storage/strider.gif`, { root: path.join('../backend/') }, err => {
-    console.log(err)
-  })
-
+router.get('/gifs', (req, res, next) => {
+  var gifs = fs.readdirSync('./media/storage');
+  gifs.shift() // Remove ".storage"
+  res.json(gifs);
 });
 
 router.post('/', (req, res, next) => {

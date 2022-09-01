@@ -44,7 +44,7 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-// exec('bash ./run.sh');
+exec('bash ./run.sh');
 
 logready('Backend');
 
