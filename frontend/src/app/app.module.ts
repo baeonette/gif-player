@@ -5,16 +5,12 @@ import { AppRoutingModule } from './app-routing.module';
 import { ReactiveFormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
-import { InputComponent } from './components/input/input.component';
 import { HomeComponent } from './components/home/home.component';
-import { GifsComponent } from './components/gifs/gifs.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    InputComponent,
     HomeComponent,
-    GifsComponent,
   ],
   imports: [
     BrowserModule,

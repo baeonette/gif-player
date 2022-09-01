@@ -55,7 +55,7 @@ router.post('/', (req, res, next) => {
         if (err && err.toString().toLowerCase().includes('file exists')) return res.send({ status: 500, message: `File already exists in storage. Jump to it <a href="#${file.name.toLowerCase()}">here</a>` }) && resolve();
 
         // Send success
-        res.send({ status: 200, message: 'File added!' });
+        res.send({ status: 200, message: `File added! Jump to it <a href="#${file.name.toLowerCase()}">here</a>` });
         resolve();
       });
     });
@@ -75,7 +75,7 @@ router.post('/play', async (req, res, next) => {
   // Copy GIF to playing dir
   var cpGif = fs.createReadStream('./media/storage/' + gif);
   cpGif.pipe(fs.createWriteStream('./media/playing/' + gif));
-  
+
   res.send({ status: 200, message: `Playing ${gif}!` });
 }); // Play GIF end
 
@@ -84,8 +84,16 @@ router.delete('/delete', (req, res, next) => {
   var gif = req.body.gif;
   fs.unlink(`./media/storage/${gif}`, (err) => {
     if (err) return res.send({ status: 500, messages: 'An error occurred deleting the GIF' });
-    if (!err) res.send({ status: 200, messages: 'Success!' });
   });
+
+  var playing = fs.readdirSync('./media/playing');
+  playing.shift(); // Remove .playing file
+
+  if (playing && playing.length && playing[0] === gif) fs.unlink(`./media/playing/${gif}`, (err) => {
+    if (err) return res.send({ status: 500, messages: 'An error occurred deleting the GIF from the playing directory' });
+  });
+
+  res.send({ status: 200, messages: 'Success!' });
 }); // Delete GIF end
 
 module.exports = router;
