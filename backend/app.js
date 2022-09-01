@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.use('/api/storage', express.static(path.join('media/storage')));
 app.use('/', indexRouter);
 app.use('/api/ftp', ftpRouter);
 
@@ -43,7 +44,7 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-exec('bash ../run.sh')
+// exec('bash ./run.sh');
 
 logready('Backend');
 

@@ -578,7 +578,7 @@ sup {
 }
 
 a {
-  color: #9c27b0;
+  color: #c0d2da;
   text-decoration: none;
   background-color: transparent;
   -webkit-text-decoration-skip: objects;
@@ -16905,12 +16905,12 @@ legend {
 }
 
 a {
-  color: #9c27b0;
+  color: #9acffa;
 }
 
 a:hover,
 a:focus {
-  color: #89229b;
+  color: #c0d2da;
   text-decoration: none;
 }
 
