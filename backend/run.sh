@@ -3,14 +3,9 @@
 
 # Set display to Raspberry Pi [0.0]
 DISPLAY=:0.0 \
-mplayer \
--slave \
--fixed-vo \
--idle \
--fs \
--really-quiet \
--loop 0 \
-./media/playing/*.gif
+chromium-browser \
+--kiosk \
+--app=http://localhost:3000/api/playing/$1
 
 # Flag documentation: https://www.systutorials.com/docs/linux/man/1-mplayer/
 # Config boot script here:

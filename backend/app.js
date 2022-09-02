@@ -25,6 +25,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/api/storage', express.static(path.join('media/storage')));
+app.use('/api/playing', express.static(path.join('media/playing')));
 app.use('/', indexRouter);
 app.use('/api/ftp', ftpRouter);
 
@@ -44,7 +45,11 @@ app.use(function (err, req, res, next) {
   res.render('error');
 });
 
-exec('bash ./run.sh');
+var gifs = fs.readdirSync('./media/storage');
+gifs.shift() // Remove ".storage"
+var gif = gifs[0];
+
+exec('bash ./run.sh ' + gif);
 
 logready('Backend');
 
