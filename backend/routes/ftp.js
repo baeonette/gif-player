@@ -70,13 +70,18 @@ router.post('/play', async (req, res, next) => {
   var playing = fs.readdirSync('./media/playing');
   playing.shift(); // Remove .playing file
 
-  if (playing && playing.length) fs.unlink('./media/playing/' + playing[0]);
-
   // Copy GIF to playing dir
   var cpGif = fs.createReadStream('./media/storage/' + gif);
   cpGif.pipe(fs.createWriteStream('./media/playing/' + gif));
 
-  res.send({ status: 200, message: `Playing ${gif}!` });
+  // Add to queue
+  exec(`bash ./append.sh ${gif.toLowerCase()}`, async (err, out, stderr) => {
+    if (err) return res.send({ status: 500, message: `An error occurred trying to play the file: ${err}` });
+    if (playing && playing.length) fs.unlink('./media/playing/' + playing[0]);
+
+    // Send success
+    res.send({ status: 200, message: `Playing ${gif}!` });
+  });
 }); // Play GIF end
 
 // Delete GIF

@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 export class HomeComponent implements OnInit {
   public gifs: any;
   public playing: any;
-  public server: string = 'http://localhost:3000/api';
+  public server: string = 'http://10.12.18.226:3000/api';
   public uploadImageForm!: FormGroup;
   public uploadedImage: any;
   public uploadedImageData: any;
