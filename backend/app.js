@@ -5,6 +5,7 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var logready = require('logready');
 var cors = require('cors');
+var fs = require('fs');
 
 var indexRouter = require('./routes/index');
 var ftpRouter = require('./routes/ftp');
