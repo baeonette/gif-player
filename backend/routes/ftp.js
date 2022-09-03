@@ -6,6 +6,39 @@ var { execSync, exec } = require('child_process');
 const path = require('path');
 const upload = multer();
 
+
+
+// Handle DISPLAY
+// Create WS server
+const WebSocket = require('ws');
+const wss = new WebSocket.Server({ port: 3001, path: '/display' });
+
+// Handle display
+router.get('/display', (req, res, next) => {
+  res.render('display');
+});
+
+var ws; // WS Connections
+wss.on('connection', async (connection) => {
+  ws = connection;
+
+  ws.on('message', data => {
+    console.log(data)
+    if (data === 'connected') {
+      var gifs = fs.readdirSync('./media/playing');
+      gifs.shift() // Remove ".storage"
+      if (!gifs.length) gifs = ['blank'];
+      ws.send(gifs[0]);
+    }
+  });
+
+  ws.on('close', () => {
+    console.log('Client has disconnected');
+  });
+}); // DISPLAY END
+
+
+
 // Get all gifs
 router.get('/gifs', (req, res, next) => {
   var gifs = fs.readdirSync('./media/storage');
@@ -75,12 +108,14 @@ router.post('/play', async (req, res, next) => {
   cpGif.pipe(fs.createWriteStream('./media/playing/' + gif));
 
   // Add to queue
-  exec(`bash ./append.sh ${gif.toLowerCase()}`, async (err, out, stderr) => {
-    if (playing && playing.length) fs.unlink('./media/playing/' + playing[0]);
-    if (err) return res.send({ status: 500, message: `An error occurred trying to play the file: ${err}` });
-    // Send success
-    res.send({ status: 200, message: `Playing ${gif}!` });
-  });
+  if (!ws) return res.send({ status: 500, message: `WebSocket Error: No connection exists` });
+  ws.send({ gif: gif.toLowerCase() });
+
+  if (playing && playing.length) fs.unlink('./media/playing/' + playing[0]);
+  if (err) return res.send({ status: 500, message: `An error occurred trying to play the file: ${err}` });
+  // Send success
+  res.send({ status: 200, message: `Playing ${gif}!` });
+
 }); // Play GIF end
 
 // Delete GIF
@@ -99,5 +134,6 @@ router.delete('/delete', (req, res, next) => {
 
   res.send({ status: 200, messages: 'Success!' });
 }); // Delete GIF end
+
 
 module.exports = router;

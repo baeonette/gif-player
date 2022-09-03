@@ -50,7 +50,7 @@ var gifs = fs.readdirSync('./media/storage');
 gifs.shift() // Remove ".storage"
 var gif = gifs[0];
 
-exec('bash ./run.sh ' + gif);
+// exec('bash ./run.sh ' + gif);
 
 logready('Backend');
 

@@ -1,12 +1,16 @@
 {
-  "name": "frontend",
+  "name": "gif-player",
   "version": "0.0.0",
+  "main": "main.js",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve",
+    "electron": "ng build --base-href ./ && electron .",
+    "start": "ng build --base-href ./ && electron .",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "package": "electron-forge package",
+    "make": "electron-forge make"
   },
   "private": true,
   "dependencies": {
@@ -18,6 +22,7 @@
     "@angular/platform-browser": "^14.0.0",
     "@angular/platform-browser-dynamic": "^14.0.0",
     "@angular/router": "^14.0.0",
+    "electron-squirrel-startup": "^1.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
@@ -26,7 +31,13 @@
     "@angular-devkit/build-angular": "^14.0.2",
     "@angular/cli": "~14.0.2",
     "@angular/compiler-cli": "^14.0.0",
+    "@electron-forge/cli": "^6.0.0-beta.65",
+    "@electron-forge/maker-deb": "^6.0.0-beta.65",
+    "@electron-forge/maker-rpm": "^6.0.0-beta.65",
+    "@electron-forge/maker-squirrel": "^6.0.0-beta.65",
+    "@electron-forge/maker-zip": "^6.0.0-beta.65",
     "@types/jasmine": "~4.0.0",
+    "electron": "^20.1.1",
     "jasmine-core": "~4.1.0",
     "karma": "~6.3.0",
     "karma-chrome-launcher": "~3.1.0",
@@ -34,5 +45,32 @@
     "karma-jasmine": "~5.0.0",
     "karma-jasmine-html-reporter": "~1.7.0",
     "typescript": "~4.7.2"
+  },
+  "config": {
+    "forge": {
+      "packagerConfig": {},
+      "makers": [
+        {
+          "name": "@electron-forge/maker-squirrel",
+          "config": {
+            "name": "gif_player"
+          }
+        },
+        {
+          "name": "@electron-forge/maker-zip",
+          "platforms": [
+            "darwin"
+          ]
+        },
+        {
+          "name": "@electron-forge/maker-deb",
+          "config": {}
+        },
+        {
+          "name": "@electron-forge/maker-rpm",
+          "config": {}
+        }
+      ]
+    }
   }
 }

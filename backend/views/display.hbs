@@ -1,0 +1,30 @@
+<style>
+    #playing {
+        width: 100%;
+        height: auto;
+        margin: 0;
+        position: absolute;
+        top: 50%;
+        -ms-transform: translateY(-50%);
+        transform: translateY(-50%);
+    }
+</style>
+
+<div id="display">
+    
+</div>
+
+<script>
+    const ws = new WebSocket('ws://localhost:3001/display');
+    ws.addEventListener('open', () => {
+        console.log('Connected!');
+        ws.send('connected');
+    });
+
+    // Add child element
+    ws.addEventListener('message', (data) => {
+        var gif = data.data;
+        document.getElementById('display').innerHTML = `<img id="playing" src="http://localhost:3000/api/storage/${gif}" alt="${gif}">`;
+    });
+</script>
+
