@@ -109,10 +109,9 @@ router.post('/play', async (req, res, next) => {
 
   // Add to queue
   if (!ws) return res.send({ status: 500, message: `WebSocket Error: No connection exists` });
-  ws.send({ gif: gif.toLowerCase() });
+  ws.send(gif.toLowerCase());
 
   if (playing && playing.length) fs.unlink('./media/playing/' + playing[0]);
-  if (err) return res.send({ status: 500, message: `An error occurred trying to play the file: ${err}` });
   // Send success
   res.send({ status: 200, message: `Playing ${gif}!` });
 
