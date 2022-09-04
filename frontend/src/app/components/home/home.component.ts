@@ -20,6 +20,7 @@ export class HomeComponent implements OnInit {
   public imageLoaded: boolean = false;
   public message: string = '';
   public uploadedName: string;
+  public loading = false;
 
   constructor(
     private fb: FormBuilder,
