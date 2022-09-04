@@ -471,6 +471,13 @@ section {
   display: block;
 }
 
+.toolbar {
+  position: fixed !important;
+  top: 0;
+  height: 25px !important;
+  -webkit-app-region: drag !important;
+}
+
 body {
   margin: 0;
   font-family: "Roboto", "Helvetica", "Arial", sans-serif;
@@ -480,6 +487,20 @@ body {
   color: #212529;
   text-align: left;
   background-color: #fafafa;
+}
+/* Scroll bar */
+body::-webkit-scrollbar {
+  width: 12px;               /* width of the entire scrollbar */
+}
+
+body::-webkit-scrollbar-track {
+  background: rgb(35, 33, 40);        /* color of the tracking area */
+}
+
+body::-webkit-scrollbar-thumb {
+  background-color: rgb(58, 58, 71);    /* color of the scroll thumb */
+  border-radius: 20px;       /* roundness of the scroll thumb */
+  border: 3px solid rgb(50, 47, 62);  /* creates padding around scroll thumb */
 }
 
 [tabindex="-1"]:focus {

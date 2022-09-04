@@ -6,8 +6,8 @@ let mainWindow
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    frame: false,
-    titleBarStyle: 'hidden',
+    // frame: false,
+    // titleBarStyle: 'hidden',
     width: 950,
     height: 700,
     minWidth: 850,
